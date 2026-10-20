@@ -1,6 +1,6 @@
-# 2026-10-20T19:00:46+05:30
+# 2026-10-20T19:40:59+05:30
 # host: Anmol-Sinha
 $ curl -s --get http://localhost:9090/api/v1/query --data-urlencode 'query=histogram_quantile(0.95, sum by (le) (rate(http_request_duration_seconds_bucket[1m])))'
 
-{"status":"success","data":{"resultType":"vector","result":[{"metric":{},"value":[1792503046.356,"0.4672682926829269"]}]}}
+{"status":"success","data":{"resultType":"vector","result":[{"metric":{},"value":[1792505459.091,"0.4684831460674158"]}]}}
 # exit code: 0

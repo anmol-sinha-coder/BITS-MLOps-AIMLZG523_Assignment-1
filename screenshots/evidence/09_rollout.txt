@@ -1,4 +1,4 @@
-# 2026-10-20T19:00:48+05:30
+# 2026-10-20T19:41:01+05:30
 # host: Anmol-Sinha
 $ kubectl rollout status deployment --timeout=60s
 

@@ -42,6 +42,12 @@ install_tools() {
     curl -fsSLo "$tmp/minikube" "https://storage.googleapis.com/minikube/releases/latest/minikube-linux-${arch}"
     sudo install -m 0755 "$tmp/minikube" /usr/local/bin/minikube
   fi
+  if ! command -v ngrok >/dev/null; then
+    log "Installing NGrok"
+    curl -fsSL https://bin.ngrok.com/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz | tar -xz
+    sudo mv ngrok /usr/local/bin/
+  fi
+
   if [ "$MODE" = "helm" ] && ! command -v helm >/dev/null; then
     log "Installing helm"
     curl -fsSLo "$tmp/get-helm-3" https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
@@ -118,6 +124,29 @@ kubectl port-forward "svc/${SVC}" "${LOCAL_PORT}:80" >/dev/null 2>&1 &
 PF=$!; trap 'kill $PF 2>/dev/null || true' EXIT
 sleep 3
 scripts/smoke_test.sh "http://localhost:${LOCAL_PORT}"
+
+# =======================================================================================================
+# NGROK Public URL Domain Deployment exposing based on Helm / Minikube KubeCtl Service obtained URL:Port
+# =======================================================================================================
+if [ -n "${NGROK_AUTHTOKEN:-}" ]; then
+  log "Starting ngrok public tunnel"
+  mkdir -p logs
+  ngrok config add-authtoken "${NGROK_AUTHTOKEN}" >/dev/null 2>&1
+  nohup ngrok http "${LOCAL_PORT}" > logs/ngrok.log 2>&1 &
+  NGROK_PID=$!
+  sleep 3
+  
+  # Retrieve generated public URL from local ngrok API
+  NGROK_URL=$(curl -s http://localhost:4040/api/tunnels | jq -r '.tunnels[0].public_url // empty' 2>/dev/null || true)
+  if [ -n "$NGROK_URL" ]; then
+    echo "=================================================="
+    echo " ngrok Public URL : ${NGROK_URL}"
+    echo "=================================================="
+  else
+    echo "ngrok started (PID ${NGROK_PID}). Check status at http://localhost:4040 or inspect logs/ngrok.log"
+  fi
+fi
+# ==============================================================================
 
 # Let the Compose Prometheus scrape the Kubernetes pods too (shows up as deployment="k8s" in Grafana)
 if $DOCKER ps --format '{{.Names}}' | grep -qx prometheus; then
