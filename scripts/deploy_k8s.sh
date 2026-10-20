@@ -116,10 +116,12 @@ else
   DEPLOY="$RELEASE"; SVC="$RELEASE"
 fi
 
+echo 
 kubectl rollout status "deployment/${DEPLOY}" --timeout=180s
 kubectl get deploy,pods,svc -o wide
 [ "$INGRESS" -eq 0 ] || kubectl get ingress
 
+sudo fuser -kv ${LOCAL_PORT}/tcp
 log "Smoke test through kubectl port-forward"
 kubectl port-forward "svc/${SVC}" "${LOCAL_PORT}:80" >/dev/null 2>&1 &
 PF=$!; trap 'kill $PF 2>/dev/null || true' EXIT
