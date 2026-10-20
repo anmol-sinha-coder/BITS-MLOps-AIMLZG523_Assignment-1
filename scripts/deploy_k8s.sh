@@ -106,7 +106,7 @@ else
     --wait --timeout 300s
 
   helm list
-  DEPLOY="$RELEASE"; SVC="$RELEASE"
+  DEPLOY="heart-disease-api"; SVC="heart-disease-service"
 fi
 
 kubectl rollout status "deployment/${DEPLOY}" --timeout=180s
