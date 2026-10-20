@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# One-shot (re)deployment of the Heart Disease MLOps stack on a local Ubuntu/Debian box.
+# One-shot (re)deployment of the Heart Disease MLOps stack on RedHat/RHEL/CentOS/Fedora or Ubuntu/Debian.
 #
 #   ./initial_deploy.sh                  # venv, tests, data, training, Compose stack, traffic, monitoring check
 #   ./initial_deploy.sh --k8s            # ... plus Minikube deployment with plain manifests (alias --with-k8s)
 #   ./initial_deploy.sh --helm           # ... plus Minikube deployment with the Helm chart (alias --with-helm)
 #   ./initial_deploy.sh --no-traffic     # do not start scripts/generate_traffic.py in the background
 #   ./initial_deploy.sh --reset          # wipe MLflow/Prometheus/Grafana volumes first (clean slate)
-#   ./initial_deploy.sh --skip-install   # do not apt-install anything (tools already present)
+#   ./initial_deploy.sh --skip-install   # do not yum/apt-install anything (tools already present)
 #
 # Safe to re-run. Run as a normal user (sudo is used only where needed).
 set -Eeuo pipefail
@@ -48,20 +48,68 @@ echo "=================================================="
 
 # 1-2. System packages + Docker ----------------------------------------------
 if [ "$SKIP_INSTALL" -eq 0 ]; then
-  step "[1/9] Installing base packages"
-  command -v apt-get >/dev/null || die "apt-get not found (Ubuntu/Debian expected); use --skip-install"
-  sudo apt-get update -y
-  sudo apt-get install -y ca-certificates curl gnupg lsb-release git python3 python3-pip python3-venv build-essential
+  step "[1/9] Detecting OS and installing base packages"
+  
+  # Read /etc/os-release to identify Linux distribution
+  if [ -f /etc/os-release ]; then
+    . /etc/os-release
+    OS_ID="${ID:-}"
+    OS_LIKE="${ID_LIKE:-}"
+  else
+    die "/etc/os-release not found; unable to determine Linux distribution"
+  fi
+
+  # Determine Package Manager (dnf / yum vs apt)
+  if command -v dnf >/dev/null 2>&1; then
+    PKGMGR="dnf"
+  elif command -v yum >/dev/null 2>&1; then
+    PKGMGR="yum"
+  elif command -v apt-get >/dev/null 2>&1 || command -v apt >/dev/null 2>&1; then
+    PKGMGR="apt"
+  else
+    die "No supported package manager found (dnf, yum, or apt required); use --skip-install"
+  fi
+
+  # Install OS Base Packages
+  if [ "$PKGMGR" = "dnf" ] || [ "$PKGMGR" = "yum" ]; then
+    echo "RedHat-family OS detected ($OS_ID). Using $PKGMGR package manager."
+    sudo "$PKGMGR" update -y
+    sudo "$PKGMGR" install -y ca-certificates curl gnupg2 git python3 python3-pip python3-devel gcc gcc-c++ make
+  else
+    echo "Debian/Ubuntu-family OS detected ($OS_ID). Using apt package manager."
+    sudo apt update -y
+    sudo apt install -y ca-certificates curl gnupg lsb-release git python3 python3-pip python3-venv build-essential
+  fi
+
+  # Install Docker Engine + Compose plugin if missing
   if ! command -v docker >/dev/null 2>&1; then
     step "[2/9] Installing Docker Engine + Compose plugin"
-    . /etc/os-release
-    case "$ID" in ubuntu|debian) DOCKER_DISTRO="$ID" ;; *) DOCKER_DISTRO="ubuntu" ;; esac
-    sudo install -m 0755 -d /etc/apt/keyrings
-    curl -fsSL "https://download.docker.com/linux/${DOCKER_DISTRO}/gpg" | sudo gpg --dearmor --yes -o /etc/apt/keyrings/docker.gpg
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/${DOCKER_DISTRO} $(lsb_release -cs) stable" \
-      | sudo tee /etc/apt/sources.list.d/docker.list >/dev/null
-    sudo apt-get update -y
-    sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+    
+    if [ "$PKGMGR" = "dnf" ] || [ "$PKGMGR" = "yum" ]; then
+      # Configure Docker CE repo for RedHat / RHEL / CentOS / Fedora
+      case "$OS_ID" in
+        fedora) DOCKER_DISTRO="fedora" ;;
+        rhel|centos|rocky|almalinux|ol) DOCKER_DISTRO="rhel" ;;
+        *) DOCKER_DISTRO="centos" ;;
+      esac
+      
+      sudo "$PKGMGR" install -y yum-utils
+      sudo yum-config-manager --add-repo "https://download.docker.com/linux/${DOCKER_DISTRO}/docker-ce.repo" || \
+      sudo dnf config-manager --add-repo "https://download.docker.com/linux/${DOCKER_DISTRO}/docker-ce.repo"
+      
+      sudo "$PKGMGR" update -y
+      sudo "$PKGMGR" install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+    else
+      # Configure Docker CE repo for Debian / Ubuntu
+      case "$OS_ID" in ubuntu|debian) DOCKER_DISTRO="$OS_ID" ;; *) DOCKER_DISTRO="ubuntu" ;; esac
+      sudo install -m 0755 -d /etc/apt/keyrings
+      curl -fsSL "https://download.docker.com/linux/${DOCKER_DISTRO}/gpg" | sudo gpg --dearmor --yes -o /etc/apt/keyrings/docker.gpg
+      echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/${DOCKER_DISTRO} $(lsb_release -cs) stable" \
+        | sudo tee /etc/apt/sources.list.d/docker.list >/dev/null
+      sudo apt update -y
+      sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+    fi
+
     sudo usermod -aG docker "$USER" || true
     sudo systemctl enable --now docker || true
   else
@@ -70,6 +118,7 @@ if [ "$SKIP_INSTALL" -eq 0 ]; then
 else
   step "[1-2/9] Skipping package installation (--skip-install)"
 fi
+
 command -v jq >/dev/null 2>&1 || true
 if docker info >/dev/null 2>&1; then DOCKER="docker"; else DOCKER="sudo docker"; fi
 $DOCKER info >/dev/null 2>&1 || die "Docker daemon is not running (try: sudo systemctl start docker)"
@@ -130,11 +179,11 @@ if [ "$TRAFFIC" -eq 1 ]; then
   echo "waiting 50 s for Prometheus to scrape ..."; sleep 50
   python3 scripts/verify_monitoring.py || echo "WARNING: some dashboard queries are empty - see output above"
 
-  scripts/capture_evidence.sh all ; python3 scripts/capture_web_screenshots.py
+  scripts/capture_evidence.sh all
+  # python3 scripts/capture_web_screenshots.py
 else
   step "[8/9] Traffic skipped (--no-traffic)"
 fi
-
 
 # 9. Optional Kubernetes --------------------------------------------------------
 if [ -n "$K8S_MODE" ]; then

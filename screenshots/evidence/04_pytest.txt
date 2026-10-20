@@ -1,14 +1,8 @@
-# 2026-10-20T16:06:51+05:30
+# 2026-10-20T16:17:40+05:30
 # host: Anmol-Sinha
 $ pytest -q --cov=src --cov-report=term
 
 ...........................................                              [100%]
-=============================== warnings summary ===============================
-../AI_ML_DL/MLOps/new_mlops-heart-disease_enhanced/.venv/lib/python3.12/site-packages/_pytest/config/__init__.py:1457
-  /home/coder/AI_ML_DL/MLOps/new_mlops-heart-disease_enhanced/.venv/lib/python3.12/site-packages/_pytest/config/__init__.py:1457: PytestConfigWarning: No files were found in testpaths; consider removing or adjusting your testpaths configuration. Searching recursively from the current directory instead.
-    self.args, self.args_source = self._decide_args(
-
--- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
 
 ---------- coverage: platform linux, python 3.12.3-final-0 -----------
 Name                     Stmts   Miss  Cover
@@ -24,6 +18,6 @@ src/train.py               143      8    94%
 --------------------------------------------
 TOTAL                      516     34    93%
 
-43 passed, 1 warning in 44.03s
+43 passed in 44.63s
 
 # exit code: 0
