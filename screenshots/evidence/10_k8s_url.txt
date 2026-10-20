@@ -1,10 +1,8 @@
-# 2026-10-20T19:56:19+05:30
+# 2026-10-20T20:06:48+05:30
 # host: Anmol-Sinha
 $ minikube service heart-disease-service --url 2>/dev/null || minikube service heart-disease-api --url
 
-* The control-plane node minikube host is not running: state=Stopped
-  To start a cluster, run: "minikube start"
-* The control-plane node minikube host is not running: state=Stopped
-  To start a cluster, run: "minikube start"
 
-# exit code: 0
+
+http://127.0.0.1:44933
+! Because you are using a Docker driver on linux, the terminal needs to be open to run it.

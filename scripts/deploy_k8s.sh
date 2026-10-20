@@ -111,8 +111,9 @@ else
     --set autoscaling.enabled="$([ "$HPA" -eq 1 ] && echo true || echo false)" \
     --wait --timeout 300s
 
-  helm list
-  DEPLOY="heart-disease-api"; SVC="heart-disease-service"
+  echo 
+  helm list -A
+  DEPLOY="$RELEASE"; SVC="$RELEASE"
 fi
 
 kubectl rollout status "deployment/${DEPLOY}" --timeout=180s
@@ -152,8 +153,6 @@ fi
 if $DOCKER ps --format '{{.Names}}' | grep -qx prometheus; then
   SVC_NAME="$SVC" scripts/add_k8s_scrape_target.sh || echo "WARNING: could not register the k8s scrape target (non-fatal)"
 fi
-
-helm list -A
 
 echo
 echo "Minikube URL : $(minikube service "$SVC" --url | head -n1)"

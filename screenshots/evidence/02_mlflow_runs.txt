@@ -1,4 +1,4 @@
-# 2026-10-20T19:56:14+05:30
+# 2026-10-20T20:06:41+05:30
 # host: Anmol-Sinha
 $ python3 - <<'PY'
 import json, urllib.request
@@ -18,10 +18,16 @@ Random_Forest champion=false
 Logistic_Regression champion=true
    params : {'C': '1.0', 'cv_folds': '5', 'test_size': '0.2', 'random_state': '42', 'n_rows': '303', 'grid_size': '4'}
    metrics: {'cv_accuracy': 0.8471, 'cv_accuracy_std': 0.01, 'cv_precision': 0.8768, 'cv_precision_std': 0.0542, 'cv_recall': 0.7834, 'cv_recall_std': 0.0459, 'cv_roc_auc': 0.9025, 'cv_roc_auc_std': 0.0144, 'test_accuracy': 0.8852, 'test_precision': 0.8387, 'test_recall': 0.9286, 'test_roc_auc': 0.9665}
+Random_Forest champion=false
+   params : {'max_depth': '5', 'min_samples_leaf': '3', 'n_estimators': '100', 'cv_folds': '5', 'test_size': '0.2', 'random_state': '42', 'n_rows': '303', 'grid_size': '16'}
+   metrics: {'cv_accuracy': 0.8056, 'cv_accuracy_std': 0.0225, 'cv_precision': 0.8109, 'cv_precision_std': 0.059, 'cv_recall': 0.7644, 'cv_recall_std': 0.0894, 'cv_roc_auc': 0.9013, 'cv_roc_auc_std': 0.0236, 'test_accuracy': 0.8689, 'test_precision': 0.8333, 'test_recall': 0.8929, 'test_roc_auc': 0.947}
+Logistic_Regression champion=true
+   params : {'C': '1.0', 'cv_folds': '5', 'test_size': '0.2', 'random_state': '42', 'n_rows': '303', 'grid_size': '4'}
+   metrics: {'cv_accuracy': 0.8471, 'cv_accuracy_std': 0.01, 'cv_precision': 0.8768, 'cv_precision_std': 0.0542, 'cv_recall': 0.7834, 'cv_recall_std': 0.0459, 'cv_roc_auc': 0.9025, 'cv_roc_auc_std': 0.0144, 'test_accuracy': 0.8852, 'test_precision': 0.8387, 'test_recall': 0.9286, 'test_roc_auc': 0.9665}
 {
   "model_name": "Logistic_Regression",
-  "trained_at": "2026-10-20T14:24:08+00:00",
-  "mlflow_run_id": "50366f8d7b8a4437853d1ff7611b7c43",
+  "trained_at": "2026-10-20T14:34:28+00:00",
+  "mlflow_run_id": "7378f683ed9a49a39ec30e5dec522511",
   "best_params": {
     "C": 1.0
   },

@@ -1,6 +1,6 @@
-# 2026-10-20T19:56:17+05:30
+# 2026-10-20T20:06:44+05:30
 # host: Anmol-Sinha
 $ curl -s --get http://localhost:9090/api/v1/query --data-urlencode 'query=sum by (outcome) (heart_predictions_total)'
 
-{"status":"success","data":{"resultType":"vector","result":[{"metric":{"outcome":"no_disease"},"value":[1792506377.267,"415"]},{"metric":{"outcome":"disease"},"value":[1792506377.267,"347"]}]}}
+{"status":"success","data":{"resultType":"vector","result":[{"metric":{"outcome":"no_disease"},"value":[1792507005.011,"711"]},{"metric":{"outcome":"disease"},"value":[1792507005.011,"530"]}]}}
 # exit code: 0
