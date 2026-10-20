@@ -6,7 +6,7 @@
 #   scripts/deploy_k8s.sh --helm --ingress --hpa      # + Ingress (heart.local) and autoscaling
 #   scripts/deploy_k8s.sh --teardown                  # remove both kinds of deployment
 #
-# Needs models/best_model.pkl (python -m src.train). Run as a normal user (minikube refuses root).
+# Needs models/best_model.pkl (python3 -m src.train). Run as a normal user (minikube refuses root).
 set -Eeuo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
 
@@ -74,7 +74,7 @@ if [ "$TEARDOWN" -eq 1 ]; then
 fi
 
 [ -n "$MODE" ] || die "choose --manifests or --helm"
-[ -f models/best_model.pkl ] || die "models/best_model.pkl missing - run: python -m src.train"
+[ -f models/best_model.pkl ] || die "models/best_model.pkl missing - run: python3 -m src.train"
 install_tools
 
 log "Minikube"

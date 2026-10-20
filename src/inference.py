@@ -1,7 +1,7 @@
 """Standalone inference check against the saved model (no API needed).
 
-Usage:  python -m src.inference
-        python -m src.inference --json '{"age": 55, ...}'
+Usage:  python3 -m src.inference
+        python3 -m src.inference --json '{"age": 55, ...}'
 """
 import argparse
 import json

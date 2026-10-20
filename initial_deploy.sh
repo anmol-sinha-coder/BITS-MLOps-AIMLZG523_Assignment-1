@@ -141,8 +141,8 @@ pytest -q
 
 # 5. Data + EDA -----------------------------------------------------------------
 step "[5/9] Dataset download/cleaning and EDA plots"
-python -m src.download_data
-python -m src.eda
+python3 -m src.download_data
+python3 -m src.eda
 
 # 6. MLflow + training ----------------------------------------------------------
 step "[6/9] Starting MLflow tracking server and training models"
@@ -152,9 +152,9 @@ for c in mlflow_server ml_api prometheus grafana; do $DOCKER rm -f "$c" >/dev/nu
 $DOCKER compose up -d mlflow
 wait_for "MLflow (port 5000)" 120 curl -fsS http://localhost:5000/health
 export MLFLOW_TRACKING_URI=http://localhost:5000
-python -m src.train
+python3 -m src.train
 [ -s models/best_model.pkl ] || die "models/best_model.pkl was not created"
-python -m src.inference
+python3 -m src.inference
 
 # 7. API + monitoring stack -----------------------------------------------------
 step "[7/9] Building image and starting API, Prometheus, Grafana"

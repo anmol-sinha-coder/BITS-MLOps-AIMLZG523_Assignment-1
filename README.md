@@ -76,14 +76,14 @@ pip install --upgrade pip && pip install -r requirements.txt
 flake8 . && pytest
 
 # 3. data + EDA
-python -m src.download_data          # raw + cleaned CSV (falls back to local copy if UCI is unreachable)
-python -m src.eda                    # plots in data/eda_plots/
+python3 -m src.download_data          # raw + cleaned CSV (falls back to local copy if UCI is unreachable)
+python3 -m src.eda                    # plots in data/eda_plots/
 
 # 4. tracking server, then training (logs to http://localhost:5000)
 docker compose up -d mlflow
 export MLFLOW_TRACKING_URI=http://localhost:5000
-python -m src.train                  # --fast for tiny grids; unset the variable to log to ./mlruns instead
-python -m src.inference              # optional local check
+python3 -m src.train                  # --fast for tiny grids; unset the variable to log to ./mlruns instead
+python3 -m src.inference              # optional local check
 
 # 5. API + monitoring stack
 docker compose up -d --build

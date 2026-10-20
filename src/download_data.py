@@ -1,6 +1,6 @@
 """Download the UCI Heart Disease (Cleveland) dataset and build the cleaned CSV.
 
-Usage:  python -m src.download_data
+Usage:  python3 -m src.download_data
 
 If the UCI site is unreachable and a raw CSV already exists locally, the
 existing file is reused so the pipeline still runs offline.

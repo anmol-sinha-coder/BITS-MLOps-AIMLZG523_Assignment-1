@@ -1,6 +1,6 @@
 """Exploratory data analysis: summary tables and publication-style plots.
 
-Usage:  python -m src.eda
+Usage:  python3 -m src.eda
 Outputs go to data/eda_plots/ (PNG + summary_statistics.csv).
 """
 import logging

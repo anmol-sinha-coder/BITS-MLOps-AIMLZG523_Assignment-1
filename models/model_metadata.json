@@ -1,7 +1,7 @@
 {
   "model_name": "Logistic_Regression",
-  "trained_at": "2026-10-20T15:39:54+00:00",
-  "mlflow_run_id": "e5311b774d7e44cbb861246e9dd25184",
+  "trained_at": "2026-10-20T15:51:47+00:00",
+  "mlflow_run_id": "e04f9066299b40f7882f0a3f7b4e6a1d",
   "best_params": {
     "C": 1.0
   },

@@ -1,7 +1,7 @@
 """Train, tune, evaluate and track the heart-disease classifiers.
 
-Usage:  python -m src.train            # full hyper-parameter grids
-        python -m src.train --fast     # tiny grids (smoke tests / CI speed)
+Usage:  python3 -m src.train            # full hyper-parameter grids
+        python3 -m src.train --fast     # tiny grids (smoke tests / CI speed)
 
 Model selection: every candidate is tuned with stratified 5-fold GridSearchCV
 (refit on ROC-AUC).  The champion is the candidate with the best *cross-

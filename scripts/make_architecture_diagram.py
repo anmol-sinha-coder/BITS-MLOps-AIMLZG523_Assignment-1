@@ -1,6 +1,6 @@
 """Render docs/architecture.png (used in README and the report).
 
-Usage:  python scripts/make_architecture_diagram.py
+Usage:  python3 scripts/make_architecture_diagram.py
 """
 from pathlib import Path
 
