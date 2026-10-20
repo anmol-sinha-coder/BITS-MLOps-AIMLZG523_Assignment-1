@@ -80,6 +80,8 @@ log "Build and load image ${IMAGE}"
 $DOCKER build -t "$IMAGE" .
 minikube image load "$IMAGE"
 
+
+# manifest mode runs the standard 'kubectl', instead of 'helm' package manager
 if [ "$MODE" = "manifests" ]; then
   helm uninstall "$RELEASE" >/dev/null 2>&1 || true          # never run both at once
   kubectl apply -f k8s/deployment.yml -f k8s/service.yml
@@ -88,12 +90,21 @@ if [ "$MODE" = "manifests" ]; then
   kubectl rollout restart deployment/heart-disease-api
   DEPLOY="heart-disease-api"; SVC="heart-disease-service"
 else
+  helm rollback heart-disease-api 1 -n default
+  helm uninstall heart-disease-api -n default
+  kubectl delete secret -n default -l owner=helm,name=heart-disease-api
+  kubectl delete secret -n default -l name=heart-disease-api,status=pending-upgrade
   kubectl delete -f k8s/service.yml -f k8s/deployment.yml --ignore-not-found >/dev/null
   helm lint "$CHART"
+  # Ensure fullname matches release name and set service.type to NodePort for local Minikube
   helm upgrade --install "$RELEASE" "$CHART" \
+    --set fullnameOverride="$RELEASE" \
+    --set service.type=NodePort \
+    --set image.pullPolicy=Never \
     --set ingress.enabled="$([ "$INGRESS" -eq 1 ] && echo true || echo false)" \
     --set autoscaling.enabled="$([ "$HPA" -eq 1 ] && echo true || echo false)" \
-    --wait --timeout 180s
+    --wait --timeout 300s
+
   helm list
   DEPLOY="$RELEASE"; SVC="$RELEASE"
 fi
