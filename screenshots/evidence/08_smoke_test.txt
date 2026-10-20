@@ -1,4 +1,4 @@
-# 2026-10-20T13:31:23+05:30
+# 2026-10-20T16:07:40+05:30
 # host: Anmol-Sinha
 $ scripts/smoke_test.sh http://localhost:8000
 

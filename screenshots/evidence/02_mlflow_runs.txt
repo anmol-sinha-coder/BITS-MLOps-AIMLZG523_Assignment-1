@@ -1,4 +1,4 @@
-# 2026-10-20T13:31:21+05:30
+# 2026-10-20T16:07:38+05:30
 # host: Anmol-Sinha
 $ python3 - <<'PY'
 import json, urllib.request
@@ -20,8 +20,8 @@ Logistic_Regression champion=true
    metrics: {'cv_accuracy': 0.8471, 'cv_accuracy_std': 0.01, 'cv_precision': 0.8768, 'cv_precision_std': 0.0542, 'cv_recall': 0.7834, 'cv_recall_std': 0.0459, 'cv_roc_auc': 0.9025, 'cv_roc_auc_std': 0.0144, 'test_accuracy': 0.8852, 'test_precision': 0.8387, 'test_recall': 0.9286, 'test_roc_auc': 0.9665}
 {
   "model_name": "Logistic_Regression",
-  "trained_at": "2026-10-20T07:59:19+00:00",
-  "mlflow_run_id": "df80476a75f54dcc9720ed92e87aa175",
+  "trained_at": "2026-10-20T10:35:45+00:00",
+  "mlflow_run_id": "7228067e268f483aa605bfed9747a256",
   "best_params": {
     "C": 1.0
   },

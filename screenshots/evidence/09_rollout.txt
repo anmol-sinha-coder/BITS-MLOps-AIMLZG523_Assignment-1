@@ -1,10 +1,7 @@
-# 2026-10-20T13:31:26+05:30
+# 2026-10-20T16:07:43+05:30
 # host: Anmol-Sinha
 $ kubectl rollout status deployment --timeout=60s
 
-deployment "heart-api" successfully rolled out
-deployment "heart-disease-api" successfully rolled out
-deployment "heart-disease-release-api" successfully rolled out
-deployment "mlflow-server" successfully rolled out
+The connection to the server 127.0.0.1:32771 was refused - did you specify the right host or port?
 
 # exit code: 0
