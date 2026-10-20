@@ -1,0 +1,7 @@
+[flake8]
+max-line-length = 120
+max-complexity = 12
+exclude = .git,__pycache__,.venv,mlruns,logs
+per-file-ignores =
+    monitoring/build_dashboard.py:E501,F541
+    scripts/*.py:E501,C901
