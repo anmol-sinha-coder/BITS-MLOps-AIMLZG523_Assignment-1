@@ -1,6 +1,6 @@
-# 2026-10-20T16:18:29+05:30
+# 2026-10-20T17:17:19+05:30
 # host: Anmol-Sinha
 $ curl -s --get http://localhost:9090/api/v1/query --data-urlencode 'query=sum(rate(http_requests_total[1m]))'
 
-{"status":"success","data":{"resultType":"vector","result":[{"metric":{},"value":[1792493310.001,"13.688941616664007"]}]}}
+{"status":"success","data":{"resultType":"vector","result":[{"metric":{},"value":[1792496839.321,"18.60177072342768"]}]}}
 # exit code: 0
