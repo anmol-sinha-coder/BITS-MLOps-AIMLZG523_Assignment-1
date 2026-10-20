@@ -1,4 +1,4 @@
-name: MLOps Assignment-1 CI/CD Pipeline
+name: MLOps CI/CD Pipeline
 
 on:
   push:
@@ -162,7 +162,7 @@ jobs:
 
       - name: Upload Container Logs
         if: always()
-        run: uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4
         with:
           name: docker-logs
           if-no-files-found: ignore
