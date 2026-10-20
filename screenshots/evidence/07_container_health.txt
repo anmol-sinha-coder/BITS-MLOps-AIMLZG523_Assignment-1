@@ -1,4 +1,4 @@
-# 2026-10-20T19:40:57+05:30
+# 2026-10-20T19:56:15+05:30
 # host: Anmol-Sinha
 $ docker inspect --format '{{.Name}} {{.State.Status}} health={{if .State.Health}}{{.State.Health.Status}}{{else}}n/a{{end}}' ml_api mlflow_server
 
