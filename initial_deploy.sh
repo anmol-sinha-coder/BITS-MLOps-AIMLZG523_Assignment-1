@@ -179,7 +179,7 @@ if [ "$TRAFFIC" -eq 1 ]; then
   echo "waiting 50 s for Prometheus to scrape ..."; sleep 50
   python3 scripts/verify_monitoring.py || echo "WARNING: some dashboard queries are empty - see output above"
 
-  scripts/capture_evidence.sh all >/dev/null 2>&1;
+  # scripts/capture_evidence.sh all >/dev/null 2>&1;
   # python3 scripts/capture_web_screenshots.py
 else
   step "[8/9] Traffic skipped (--no-traffic)"

@@ -133,20 +133,29 @@ if [ -n "${NGROK_AUTHTOKEN:-}" ]; then
   log "Starting ngrok public tunnel"
   mkdir -p logs
   ngrok config add-authtoken "${NGROK_AUTHTOKEN}" >/dev/null 2>&1
-  nohup ngrok http "${LOCAL_PORT}" > logs/ngrok.log 2>&1 &
-  NGROK_PID=$!
-  sleep 3
-  
-  # Retrieve generated public URL from local ngrok API
-  NGROK_URL=$(curl -s http://localhost:4040/api/tunnels | jq -r '.tunnels[0].public_url // empty' 2>/dev/null || true)
-  if [ -n "$NGROK_URL" ]; then
-    echo "=================================================="
-    echo " ngrok Public URL : ${NGROK_URL}"
-    echo "=================================================="
-  else
-    echo "ngrok started (PID ${NGROK_PID}). Check status at http://localhost:4040 or inspect logs/ngrok.log"
-  fi
+
+  # 1. Fetch Minikube target URL dynamically
+  MINIKUBE_TARGET="$(nohup minikube service "$SVC" --url | head -n1)" >/dev/null 2>&1;
+  MINIKUBE_PORT="$MINIKUBE_TARGET" | cut -d':' -f3
+
+  # 2. Start ngrok in background with stdout logging
+  nohup ngrok http "$MINIKUBE_PORT" --log=stdout > logs/ngrok.log 2>&1 &
+
+  # 3. Poll local ngrok API until ready (max 10s retry loop)
+  echo "Waiting for ngrok tunnel to initialize..."
+  waited=0
+  until curl -s http://127.0.0.1:4040/api/tunnels | grep -q 'public_url' || [ "$waited" -ge 10 ]; do
+    sleep 1
+    waited=$((waited + 1))
+  done
+
+  # 4. Extract public URL reliably
+  NGROK_URL=$(curl -s http://127.0.0.1:4040/api/tunnels | jq -r '.tunnels[0].public_url // empty')
 fi
+
+# Print final summary banner
+echo
+echo "ngrok URL    : ${NGROK_URL:-Unavailable (check logs/ngrok.log)}"
 # ==============================================================================
 
 # Let the Compose Prometheus scrape the Kubernetes pods too (shows up as deployment="k8s" in Grafana)
@@ -155,5 +164,5 @@ if $DOCKER ps --format '{{.Names}}' | grep -qx prometheus; then
 fi
 
 echo
-echo "Minikube URL : $(minikube service "$SVC" --url | head -n1)"
+echo "Minikube URL : $MINIKUBE_TARGET"
 echo "Port-forward : kubectl port-forward svc/${SVC} ${LOCAL_PORT}:80   then scripts/generate_traffic.py --url http://localhost:${LOCAL_PORT}"

@@ -1,0 +1,5 @@
+t=2026-10-20T20:34:33+0530 lvl=info msg="no configuration paths supplied"
+t=2026-10-20T20:34:33+0530 lvl=info msg="using configuration at default config path" path=/home/coder/.config/ngrok/ngrok.yml
+t=2026-10-20T20:34:33+0530 lvl=info msg="open config file" path=/home/coder/.config/ngrok/ngrok.yml err=<nil>
+t=2026-10-20T20:34:33+0530 lvl=info msg="FIPS 140 mode" enabled=false
+ERROR:  Tunnel 'command_line' must specify 'addr' to tunnel to
