@@ -7,7 +7,7 @@
 #   scripts/deploy_k8s.sh --teardown                  # remove both kinds of deployment
 #
 # Needs models/best_model.pkl (python3 -m src.train). Run as a normal user (minikube refuses root).
-set -Eeuo pipefail
+# set -Eeuo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
 
 MODE=""; INGRESS=0; HPA=0; TEARDOWN=0

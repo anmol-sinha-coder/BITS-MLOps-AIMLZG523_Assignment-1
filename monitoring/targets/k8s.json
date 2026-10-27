@@ -1,1 +1,1 @@
-[{"targets": ["192.168.49.2:31458"], "labels": {"deployment": "k8s"}}]
+[{"targets": ["192.168.49.2:30857"], "labels": {"deployment": "k8s"}}]

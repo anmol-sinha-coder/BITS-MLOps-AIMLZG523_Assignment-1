@@ -1,23 +1,23 @@
 {
   "model_name": "Logistic_Regression",
-  "trained_at": "2026-10-20T17:47:50+00:00",
-  "mlflow_run_id": "9f47c8fdfab141d68ef16daf111e51f7",
+  "trained_at": "2026-10-21T15:45:37+00:00",
+  "mlflow_run_id": "92d00b3c86334e1d8d6f9a847a4787e6",
   "best_params": {
-    "C": 0.1
+    "C": 1.0
   },
   "metrics": {
-    "cv_accuracy": 0.8478,
-    "cv_accuracy_std": 0.016,
-    "cv_precision": 0.8662,
-    "cv_precision_std": 0.0493,
-    "cv_recall": 0.7929,
-    "cv_recall_std": 0.021,
-    "cv_roc_auc": 0.9056,
-    "cv_roc_auc_std": 0.0285,
-    "test_accuracy": 0.8033,
-    "test_precision": 0.7222,
+    "cv_accuracy": 0.8471,
+    "cv_accuracy_std": 0.01,
+    "cv_precision": 0.8768,
+    "cv_precision_std": 0.0542,
+    "cv_recall": 0.7834,
+    "cv_recall_std": 0.0459,
+    "cv_roc_auc": 0.9025,
+    "cv_roc_auc_std": 0.0144,
+    "test_accuracy": 0.8852,
+    "test_precision": 0.8387,
     "test_recall": 0.9286,
-    "test_roc_auc": 0.9372
+    "test_roc_auc": 0.9665
   },
   "features": [
     "age",
@@ -36,5 +36,5 @@
   ],
   "sklearn_version": "1.4.1.post1",
   "python_version": "3.12.3",
-  "n_training_rows": 243
+  "n_training_rows": 242
 }

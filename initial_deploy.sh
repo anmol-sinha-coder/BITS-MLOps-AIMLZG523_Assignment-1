@@ -7,9 +7,9 @@
 #   ./initial_deploy.sh --no-traffic     # do not start scripts/generate_traffic.py in the background
 #   ./initial_deploy.sh --reset          # wipe MLflow/Prometheus/Grafana volumes first (clean slate)
 #   ./initial_deploy.sh --skip-install   # do not yum/apt-install anything (tools already present)
-#
+
 # Safe to re-run. Run as a normal user (sudo is used only where needed).
-set -Eeuo pipefail
+# set -Eeuo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
 K8S_MODE=""; RESET=0; SKIP_INSTALL=0; TRAFFIC=1
